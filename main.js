@@ -1,4 +1,6 @@
 const electron = require('electron')
+const {screen} = electron;
+
 // Module to control application life.
 const app = electron.app
 // Module to create native browser window.
@@ -12,6 +14,7 @@ const url = require('url')
 let mainWindow
 
 function createWindow () {
+  console.log(screen)
   // Create the browser window.
   mainWindow = new BrowserWindow({width: 800, height: 600})
 

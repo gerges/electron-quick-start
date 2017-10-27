@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>ElectronTeamID</key>
+	<string>E434N33F2R</string>
+	<key>NSHumanReadableCopyright</key>
+	<string>© 2017 Electron, Inc</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLIconFile</key>
+			<string>electron.icns</string>
+			<key>CFBundleURLName</key>
+			<string>electron URL</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>electron</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

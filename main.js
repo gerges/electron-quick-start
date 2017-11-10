@@ -1,6 +1,7 @@
 const electron = require('electron')
 // Module to control application life.
 const app = electron.app
+const session = electron.session;
 // Module to create native browser window.
 const BrowserWindow = electron.BrowserWindow
 
@@ -32,12 +33,49 @@ function createWindow () {
     // when you should delete the corresponding element.
     mainWindow = null
   })
+  return mainWindow;
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow)
+app.on('ready', () => {
+  let window = createWindow();
+  session.defaultSession.setPermissionRequestHandler((webContents, permission, callback) => {
+    if (permission === 'openExternal') {
+      window.webContents.send("log", `openExternal requested with WebContents url ${webContents.getURL()}`);
+      callback(false);
+    }
+  });
+
+  window.webContents.on('will-navigate', (e, url) => {
+    window.webContents.send("log", `browserWindow will-navigate called with ${url}`);
+  });
+
+  window.webContents.on('did-navigate-in-page', (e, url, isMainFrame) => {
+    window.webContents.send("log", `browserWindow did-navigate-in-page called with ${url}`);
+  });
+
+  window.webContents.on('did-fail-provisional-load', (e, code, desc, url) => {
+    window.webContents.send("log", `browserWindow did-fail-provisional-load called with ${url}`);
+  });
+
+  app.on('web-contents-created', (event, contents) => {
+    if (contents.getType() === 'webview') {
+      contents.on('will-navigate', (e, url) => {
+        window.webContents.send("log", `webview will-navigate called with ${url}`);
+      });
+
+      contents.on('did-navigate-in-page', (e, url, isMainFrame) => {
+        window.webContents.send("log", `webview did-navigate-in-page called with ${url}`);
+      });
+
+      contents.on('did-fail-provisional-load', (e, code, desc, url) => {
+        window.webContents.send("log", `webview did-fail-provisional-load called with ${url}`);
+      });
+    }
+  });
+})
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -55,6 +93,5 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.

@@ -1,3 +1,5 @@
-// This file is required by the index.html file and will
-// be executed in the renderer process for that window.
-// All of the Node.js APIs are available in this process.
+const ipcRenderer = require('electron').ipcRenderer;
+let consoleDiv = document.querySelector('#console');
+ipcRenderer.on('log', (e, ...args) => {
+  consoleDiv.innerText = consoleDiv.innerText  + '\n\n' + args.join(' ');
+});
